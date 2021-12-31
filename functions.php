@@ -19,7 +19,7 @@ function checkUser(PDO $dbcon, $username, $passwd){
     $passwd = filter_var($passwd, FILTER_SANITIZE_STRING);
 
     try{
-        $sql = "SELECT password FROM user WHERE username=?";  //komento, arvot parametreina
+        $sql = "SELECT password FROM users WHERE username=?";  //komento, arvot parametreina
         $prepare = $dbcon->prepare($sql);   //valmistellaan
         $prepare->execute(array($username));  //kysely tietokantaan
 
@@ -44,17 +44,19 @@ function checkUser(PDO $dbcon, $username, $passwd){
 /**
  * Luo tietokantaan uuden käyttäjän ja hashaa salasanan
  */
-function createUser(PDO $dbcon, $username, $passwd){
+function createUser(PDO $dbcon, $uname, $passwd, $firstname, $lastname){
 
 
-    $username = filter_var($username, FILTER_SANITIZE_STRING);
+    $username = filter_var($uname, FILTER_SANITIZE_STRING);
     $passwd = filter_var($passwd, FILTER_SANITIZE_STRING);
+    $firstname = filter_var($firstname, FILTER_SANITIZE_STRING);
+    $lastname = filter_var($lastname, FILTER_SANITIZE_STRING);
 
     try{
         $hash_pw = password_hash($passwd, PASSWORD_DEFAULT); //salasanan hash
-        $sql = "INSERT IGNORE INTO users VALUES (?,?)"; //komento, arvot parametreina
+        $sql = "INSERT INTO users VALUES (?,?,?,?)"; //komento, arvot parametreina
         $prepare = $dbcon->prepare($sql); //valmistellaan
-        $prepare->execute(array($username, $hash_pw));  //parametrit tietokantaan
+        $prepare->execute(array($username, $hash_pw, $firstname, $lastname));  //parametrit tietokantaan
     }catch(PDOException $e){
         echo '<br>'.$e->getMessage();
     }

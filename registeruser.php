@@ -4,10 +4,11 @@ require('functions.php');
 
 $json = json_decode(file_get_contents('php://input'));
 
-$id = filter_var($json->id, FILTER_SANITIZE_STRING);
 $uname = filter_var($json->uname, FILTER_SANITIZE_STRING);
 $passwd = filter_var($json->passwd, FILTER_SANITIZE_STRING);
+$firstname = filter_var($json->fname, FILTER_SANITIZE_STRING);
+$lastname = filter_var($json->lname, FILTER_SANITIZE_STRING);
 
 $db = createDbConnection();
 
-createUser($db, $id, $uname, $passwd);
+createUser($db, $uname, $passwd, $firstname, $lastname);
